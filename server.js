@@ -10,7 +10,8 @@ const secret = 'Kjj40n2jkjdm5M'; // coming from the users route to be able to re
 
 
 // importing routes
-const GroupCreationRoute = require('./routes/GroupCreationRoute.js');
+const GroupsRoute = require('./routes/GroupsRoute.js');
+const EventsRoute = require('./routes/EventsRoute.js');
 //const FeedsRoute = require('./routes/FeedsRoute.js');
 //const UsersRoute = require('./routes/UsersRoute.js');
 //const EmailsRoute = require('./routes/EmailsRoute.js');
@@ -61,7 +62,7 @@ passportJwt(passport); // invoking the function - using the package name : passp
 
 
 
-const dBURL = 'mongodb+srv://admin01:db12345@cluster0-pdgtp.mongodb.net/test?retryWrites=true&w=majority';
+const dBURL = 'mongodb+srv://admin01:db12345@cluster0.spafu.mongodb.net/finalproject?retryWrites=true&w=majority';
 mongoose.connect(dBURL, {
     'useNewUrlParser' : true,
     'useUnifiedTopology' : true
@@ -80,7 +81,13 @@ server.use(
     '/groups', 
     // to make the route private - can't be accessed unliss logged in 
     //passport.authenticate('jwt', {session:false}),
-    GroupCreationRoute
+    GroupsRoute
+);
+server.use(
+    '/events', 
+    // to make the route private - can't be accessed unliss logged in 
+    //passport.authenticate('jwt', {session:false}),
+    EventsRoute
 );
 /*server.use(
     '/feeds', 

@@ -1,7 +1,7 @@
 // Import mongoose 
 const mongoose = require('mongoose');
 
-const GroupCreationSchema = new mongoose.Schema(
+const GroupsSchema = new mongoose.Schema(
     {
         name: {
             type: String,
@@ -25,10 +25,14 @@ const GroupCreationSchema = new mongoose.Schema(
             
 
         },
+        date: {
+            type : Date, 
+            default : Date.now
+        }
 
         
     }
 );
 
-const GroupCreationModel = mongoose.model('groups', GroupCreationSchema);
-module.exports = GroupCreationModel;
+const GroupsModel = mongoose.model('groups', GroupsSchema);
+module.exports = GroupsModel;
