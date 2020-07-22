@@ -71,7 +71,7 @@ mongoose.connect(
 
 server.use(
     '/groups',
-    passport.authenticate('jwt', {session:false}), 
+    //passport.authenticate('jwt', {session:false}), 
     GroupsRoute
 );
 
