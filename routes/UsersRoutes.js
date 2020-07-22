@@ -4,48 +4,44 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const secret = process.env.SECRET;
-const cloudinary = require('cloudinary');
 
 const UsersModel = require('../models/UsersModel');
-const { route } = require('./ProductsRoutes');
 
-// /register
 router.post(
-    '/register',     // http://localhost:8080/users/register
+    '/register',     
     (req, res) => {
         const formData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            userName: req.body.userName,
+            community: req.body.community,
+            building: req.body.building,
+            floor: req.body.floor,
             email: req.body.email,
             password: req.body.password
         };
 
-        // Step 1) Generate a salt
         bcrypt.genSalt(
             (err, salt) => {
 
-                // Step 2) Generate a hash
                 bcrypt.hash(
-                    formData.password, // first ingredient
-                    salt, // second ingredient
+                    formData.password, 
+                    salt, 
                     (err, hashedPassword) => {
 
                         const newUsersModel = new UsersModel(formData);
 
-                        // Step 3) Replace the original password with hash
+                
                         newUsersModel.password = hashedPassword;
 
-                        // Step 4) Save user data to database (with encrypted password)
                         newUsersModel.save(
                             (err, dbResult) => {
 
-                                // If something goes wrong, send error
                                 if(err) {
-                                    res.json({message: err});
+                                    res.json({message:err});
                                 }
-                                // Otherwise, send success message
                                 else {
-                                    res.json({message: "User has been saved"});
+                                    res.json({message:"User has been saved"});
                                 }
                             }
                         );
@@ -57,41 +53,30 @@ router.post(
     }
 );
 
-// /login
 router.post(
     '/login',
     (req, res) => {
 
-        // npm packages: passport, passport-jwt, jsonwebtoken
-
-        // Step 1. Capture formData (email & password)
         const formData = {
             email: req.body.email,
             password: req.body.password
         }
 
-
-        // Step 2a. In database, find account that matches email
         UsersModel.findOne(
             {email: formData.email},
             (err, document) => {
 
-                // Step 2b. If email NOT match, reject the login request
                 if(!document) {
-                    res.json({message: "Please check email or password"});
+                    res.json({message:"Please check email or password"});
                 }
 
-                // Step 3. If there's matching email, examine the document's password
                 else {
 
-                    // Step 4. Compare the encrypted password in db with incoming password
                     bcrypt.compare(formData.password, document.password)
                     .then(
                         (isMatch) => {
 
-                            // Step 5a. If the password matches, generate web token (JWT)
                             if(isMatch === true) {
-                                // Step 6. Send the JWT to the client
                                 const payload = { 
                                     id: document.id,
                                     email: document.email
@@ -112,9 +97,8 @@ router.post(
 
                             }
 
-                            // Step 5b. If password NOT match, reject login request
                             else {
-                                res.json({message: "Please check email or password"})
+                                res.json({message:"Please check email or password"})
                             }
                         }
                     )
@@ -123,22 +107,6 @@ router.post(
 
             }
         )
-    }
-)
-
-router.post(
-    '/image-upload',
-    (req, res) => {
-        const files = Object.values(req.files);
-
-        cloudinary.uploader.upload(
-            files[0].path, 
-            function(error, result) {
-                console.log(result, error)
-            }
-        );
-
-        res.json({message: files})
     }
 )
 
