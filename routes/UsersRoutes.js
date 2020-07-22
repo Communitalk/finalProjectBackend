@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const secret = "s3cr3t100";
+require('dotenv').config();
+const secret = process.env.SECRET;
 
 const UsersModel = require('../models/UsersModel');
 
 router.post(
-    '/register',     // http://localhost:8080/users/register
+    '/register',     
     (req, res) => {
         const formData = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            userName: req.body.userName,
             community: req.body.community,
             building: req.body.building,
             floor: req.body.floor,
-            apartment: req.body.apartment,
             email: req.body.email,
             password: req.body.password
         };
