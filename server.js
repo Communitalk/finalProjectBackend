@@ -51,7 +51,7 @@ server.use(cors());
 
 passportJwt(passport);
 
-const dBURL = 'mongodb+srv://admin01:db12345@cluster0.spafu.mongodb.net/finalproject?retryWrites=true&w=majority';
+const dbURL = 'mongodb+srv://admin01:db12345@cluster0.spafu.mongodb.net/finalproject?retryWrites=true&w=majority';
 
 mongoose.connect(
     dbURL,
@@ -72,7 +72,7 @@ mongoose.connect(
 server.use(
     '/groups',
     passport.authenticate('jwt', {session:false}), 
-    GroupsRoutes
+    GroupsRoute
 );
 
 server.use(
@@ -88,7 +88,7 @@ server.use(
 
 server.use(
     '/events',
-    EventsRoutes
+    EventsRoute
 );
 
 server.get(
