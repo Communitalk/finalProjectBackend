@@ -1,10 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const secret = "s3cr3t100";
+const secret = process.env.SECRET;
 
 const cors = require('cors');
 
@@ -51,7 +52,7 @@ server.use(cors());
 
 passportJwt(passport);
 
-const dbURL = 'mongodb+srv://admin01:db12345@cluster0.spafu.mongodb.net/finalproject?retryWrites=true&w=majority';
+const dbURL = process.env.DB_URL;
 
 mongoose.connect(
     dbURL,
@@ -77,7 +78,7 @@ server.use(
 
 server.use(
     '/feeds',
-    // passport.authenticate('jwt', {session:false}), // Use passport-jwt to authenticate
+    passport.authenticate('jwt', {session:false}), // Use passport-jwt to authenticate
     FeedsRoutes
 );
 
